@@ -1,0 +1,462 @@
+INFO  => Recipe ./recipe.yml is valid
+INFO  => Templating for recipe at ./recipe.yml
+INFO  => Retrieving OS version from ghcr.io/blue-build/base-images/fedora-cosmic:44
+INFO  => Retrieving OS version from ghcr.io/blue-build/base-images/fedora-cosmic:44
+INFO  => Building image localhost/my-custom-os:latest_linux_amd64
+INFO  => Pulling image ghcr.io/blue-build/base-images/fedora-cosmic@sha256:644c16263fa4168a065c47a17294232e5fc4db095dbd5fa0af7a19ea6cd2cd03...
+INFO  => Successfully pulled image ghcr.io/blue-build/base-images/fedora-cosmic@sha256:644c16263fa4168a065c47a17294232e5fc4db095dbd5fa0af7a19ea6cd2cd03
+l/my-custom-os:latest_linux_amd64 => [1/5] STEP 1/1: FROM ghcr.io/blue-build/base-images/fedora-cosmic@sha256:644c16263fa4168a065c47a17294232e5fc4db095dbd5fa0af7a19ea6cd2cd03 AS my-custom-os
+l/my-custom-os:latest_linux_amd64 => --> 05b51a75b32b
+l/my-custom-os:latest_linux_amd64 => [2/5] STEP 1/2: FROM scratch AS stage-files
+l/my-custom-os:latest_linux_amd64 => [2/5] STEP 2/2: COPY ./files /files
+l/my-custom-os:latest_linux_amd64 => --> e40fa49a9bf2
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 1/3: FROM scratch AS stage-bins
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 2/3: COPY --from=ghcr.io/sigstore/cosign/cosign:v3.1.1   /ko-app/cosign /bins/cosign
+l/my-custom-os:latest_linux_amd64 => --> Using cache 85a2811d81dd1a64eaab501490de442130b97242c689f46034517fc7f183da5d
+l/my-custom-os:latest_linux_amd64 => --> 85a2811d81dd
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 3/3: COPY --from=ghcr.io/blue-build/cli:latest-installer   /out/bluebuild /bins/bluebuild
+l/my-custom-os:latest_linux_amd64 => --> Using cache 276204d8650543eb3e70992bbb4a28a8efcd056b9b4cd6c45dc2b47ad9ad1c36
+l/my-custom-os:latest_linux_amd64 => --> 276204d86505
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 1/33: FROM 05b51a75b32b9aa87d95be791584e24a2efd3faca785cdae7aea333f441401bf
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 2/33: ARG TARGETARCH
+l/my-custom-os:latest_linux_amd64 => --> Using cache c05c7b541ebece7d541dc1b645d359b125c999f1d41cab6360cfb835fe47d2ed
+l/my-custom-os:latest_linux_amd64 => --> c05c7b541ebe
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 3/33: ARG RECIPE=./recipe.yml
+l/my-custom-os:latest_linux_amd64 => --> Using cache e042581b13ef1fa7569c3f8ddbd9c1fc5db79becbb84310785c083e19a2a48e3
+l/my-custom-os:latest_linux_amd64 => --> e042581b13ef
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 4/33: ARG IMAGE_REGISTRY=localhost
+l/my-custom-os:latest_linux_amd64 => --> Using cache 04179bdf156cb6ffb1fe86fe9d586f7bc6d3551604a90db313bb9aade09d4ec9
+l/my-custom-os:latest_linux_amd64 => --> 04179bdf156c
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 5/33: ARG BB_BUILD_FEATURES=""
+l/my-custom-os:latest_linux_amd64 => --> Using cache bebaddf68106b0b62e8eb5117009f40170e2803e6c0a33275e15736294e726ec
+l/my-custom-os:latest_linux_amd64 => --> bebaddf68106
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 6/33: ARG CONFIG_DIRECTORY="/tmp/files"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 0e2d7da9f5d361c942c3df24e769ba72ffb14d3f6bb7e39738fce3d9bbf81384
+l/my-custom-os:latest_linux_amd64 => --> 0e2d7da9f5d3
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 7/33: ARG MODULE_DIRECTORY="/tmp/modules"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 0993d9542615bf4ff904a6741ffdf0ede8ca6e106647e4815e69f8b608f47c60
+l/my-custom-os:latest_linux_amd64 => --> 0993d9542615
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 8/33: ARG IMAGE_NAME="my-custom-os"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 04c20c094abd3499fa6d24ebb0e7ce888424b477240c7ab222dd1ebd210a88f1
+l/my-custom-os:latest_linux_amd64 => --> 04c20c094abd
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 9/33: ARG BASE_IMAGE="ghcr.io/blue-build/base-images/fedora-cosmic"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 24c864f2355ed338cef2a472cf8af65d5f142cecaab14f858ecc2427e40c466a
+l/my-custom-os:latest_linux_amd64 => --> 24c864f2355e
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 10/33: RUN --mount=type=bind,from=stage-bins,src=/bins,dst=/tmp/bins   mkdir -p /usr/bin/   && cp /tmp/bins/* /usr/bin/
+l/my-custom-os:latest_linux_amd64 => --> Using cache e8ca9ed1e174cf742a4f98317d0040686edab32f487e4d139998ea2afe54083b
+l/my-custom-os:latest_linux_amd64 => --> e8ca9ed1e174
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 11/33: RUN --mount=type=bind,from=ghcr.io/blue-build/nushell-image:default,src=/nu,dst=/tmp/nu   mkdir -p /usr/libexec/bluebuild/nu   && cp -r /tmp/nu/* /usr/libexec/bluebuild/nu/
+l/my-custom-os:latest_linux_amd64 => --> Using cache 145ac8fc02590683bfaa833d402f00b466b451d9341977a7d5a5f73a20c80e12
+l/my-custom-os:latest_linux_amd64 => --> 145ac8fc0259
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 12/33: RUN --mount=type=bind,src=.bluebuild-scripts_,dst=/scripts/,Z   /scripts/pre_build.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache 6eb0e03d0cb336f375133df790997ab6a85eac2e7405ce9aa5f731342b737dd2
+l/my-custom-os:latest_linux_amd64 => --> 6eb0e03d0cb3
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 13/33: COPY scripts/build-custom-battery-applet.sh /tmp/
+l/my-custom-os:latest_linux_amd64 => --> Using cache 98b16381c8b4a1a00902fb88d2082ec87f71bac932b67cf1e1b31ab0dfb144cf
+l/my-custom-os:latest_linux_amd64 => --> 98b16381c8b4
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 14/33: RUN chmod +x /tmp/build-custom-battery-applet.sh && /tmp/build-custom-battery-applet.sh && rm /tmp/build-custom-battery-applet.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache 5ec878ece14ddd22def970b7f1ddfd98b9abb9d2fbf9cbc74ad8543d533c2763
+l/my-custom-os:latest_linux_amd64 => --> 5ec878ece14d
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 15/33: COPY scripts/install-nvpn.sh /tmp/
+l/my-custom-os:latest_linux_amd64 => --> Using cache 33ee650a98e6cc2bc303e864a6a3a7aac01e0824dada32b7af48bee1f44f151c
+l/my-custom-os:latest_linux_amd64 => --> 33ee650a98e6
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 16/33: RUN chmod +x /tmp/install-nvpn.sh && /tmp/install-nvpn.sh && rm /tmp/install-nvpn.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache d74c2d0a006d6c5a6b0f2a980f7d39272dbfcac3c1be64e0004c3285834b0b56
+l/my-custom-os:latest_linux_amd64 => --> d74c2d0a006d
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 17/33: RUN dnf copr enable -y atim/nushell
+l/my-custom-os:latest_linux_amd64 => --> Using cache 96b6dc0b5b5e79c5362658ed1767be7de10aeb4f7d6940285516384f15bbd66f
+l/my-custom-os:latest_linux_amd64 => --> 96b6dc0b5b5e
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 18/33: RUN dnf install -y firewalld fish gnome-console tailscale waypipe gcc make curl file nushell hunspell-de ddcutil yt-dlp ffmpeg && dnf clean all
+l/my-custom-os:latest_linux_amd64 => --> Using cache c414e292d3d54ac1a57748fe7408b6973e0c2af90185605c99f96a6d1c819ab8
+l/my-custom-os:latest_linux_amd64 => --> c414e292d3d5
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 19/33: RUN dnf remove -y gnome-system-monitor && dnf clean all
+l/my-custom-os:latest_linux_amd64 => --> Using cache 6ff6714188304c31da11f6d924005d512aef895b84359bd63835015d1e5cd365
+l/my-custom-os:latest_linux_amd64 => --> 6ff671418830
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 20/33: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/dnf:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'dnf' '{"type":"dnf","install":{"packages":["chatgpt.x86_64.rpm"]}}'
+l/my-custom-os:latest_linux_amd64 => ============================== Start 'dnf' Module ==============================
+l/my-custom-os:latest_linux_amd64 => Updating and loading repositories:
+l/my-custom-os:latest_linux_amd64 =>  Fedora 44 - x86_64 - Updates Archive   100% |   2.8 KiB/s |   3.4 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 =>  Fedora 44 - x86_64 - Updates           100% |   5.1 KiB/s |  10.5 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 =>  Fedora 44 openh264 (From Cisco) - x86_ 100% | 483.0   B/s | 986.0   B |  00m02s
+l/my-custom-os:latest_linux_amd64 =>  Fedora 44 - x86_64                     100% |   9.6 KiB/s |  19.6 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 =>  Copr repo for nushell owned by atim    100% |   1.3 KiB/s |   1.5 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => Repositories loaded.
+l/my-custom-os:latest_linux_amd64 => Metadata cache created.
+l/my-custom-os:latest_linux_amd64 => [32mInstalling local packages:[0m
+l/my-custom-os:latest_linux_amd64 => - [36m/tmp/files/dnf/chatgpt.x86_64.rpm[0m
+l/my-custom-os:latest_linux_amd64 => Updating and loading repositories:
+l/my-custom-os:latest_linux_amd64 => Repositories loaded.
+l/my-custom-os:latest_linux_amd64 => Package                 Arch   Version             Repository        Size
+l/my-custom-os:latest_linux_amd64 => Installing:
+l/my-custom-os:latest_linux_amd64 =>  chatgpt                x86_64 0:26.930.61225-1    @commandline   1.5 GiB
+l/my-custom-os:latest_linux_amd64 => Installing dependencies:
+l/my-custom-os:latest_linux_amd64 =>  perl-AutoLoader        noarch 0:5.74-525.fc44     updates       20.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-B                 x86_64 0:1.89-525.fc44     updates      501.2 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Carp              noarch 0:1.54-521.fc44     fedora        46.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Class-Struct      noarch 0:0.68-525.fc44     updates       25.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Data-Dumper       x86_64 0:2.192-523.fc44    updates      115.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Digest            noarch 0:1.20-521.fc44     fedora        35.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Digest-MD5        x86_64 0:2.59-521.fc44     fedora        59.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-DynaLoader        x86_64 0:1.57-525.fc44     updates       32.1 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Encode            x86_64 4:3.21-521.fc44     fedora         4.7 MiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Errno             x86_64 0:1.38-525.fc44     updates        8.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Error             noarch 1:0.17030-3.fc44    fedora        76.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Exporter          noarch 0:5.79-521.fc44     fedora        54.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Fcntl             x86_64 0:1.20-525.fc44     updates       48.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-File-Basename     noarch 0:2.86-525.fc44     updates       14.0 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-File-Path         noarch 0:2.18-522.fc44     fedora        63.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-File-Temp         noarch 1:0.231.200-2.fc44  fedora       163.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-File-stat         noarch 0:1.14-525.fc44     updates       12.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-FileHandle        noarch 0:2.05-525.fc44     updates        9.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Getopt-Long       noarch 1:2.58-521.fc44     fedora       144.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Getopt-Std        noarch 0:1.14-525.fc44     updates       11.2 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Git               noarch 0:2.56.0-1.fc44     updates       64.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-HTTP-Tiny         noarch 0:0.096-1.fc44      updates      162.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-IO                x86_64 0:1.55-525.fc44     updates      147.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-IO-Socket-IP      noarch 0:0.43-522.fc44     fedora       100.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-IO-Socket-SSL     noarch 0:2.098-2.fc44      fedora       723.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-IPC-Open3         noarch 0:1.24-525.fc44     updates       27.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-MIME-Base32       noarch 0:1.303-25.fc44     fedora        30.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-MIME-Base64       x86_64 0:3.16-521.fc44     fedora        41.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Net-SSLeay        x86_64 0:1.94-12.fc44      fedora         1.3 MiB
+l/my-custom-os:latest_linux_amd64 =>  perl-POSIX             x86_64 0:2.23-525.fc44     updates      229.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-PathTools         x86_64 0:3.94-521.fc44     fedora       179.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Pod-Escapes       noarch 1:1.07-521.fc44     fedora        24.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Pod-Perldoc       noarch 0:3.28.01-522.fc44  fedora       163.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Pod-Simple        noarch 1:3.47-4.fc44       fedora       565.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Pod-Usage         noarch 4:2.05-521.fc44     fedora        86.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Scalar-List-Utils x86_64 5:1.70-2.fc44       fedora       144.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-SelectSaver       noarch 0:1.02-525.fc44     updates        2.2 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Socket            x86_64 4:2.043-1.fc44      updates      121.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Storable          x86_64 1:3.37-522.fc44     fedora       235.1 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Symbol            noarch 0:1.09-525.fc44     updates        6.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Term-ANSIColor    noarch 0:5.01-522.fc44     fedora        97.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Term-Cap          noarch 0:1.18-521.fc44     fedora        29.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-TermReadKey       x86_64 0:2.38-27.fc44      fedora        63.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Text-ParseWords   noarch 0:3.31-521.fc44     fedora        13.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Text-Tabs+Wrap    noarch 0:2024.001-521.fc44 fedora        22.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Time-HiRes        x86_64 4:1.9778-521.fc44   fedora       115.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Time-Local        noarch 2:1.350-521.fc44    fedora        69.0 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-URI               noarch 0:5.36-1.fc44       updates      275.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-Unicode-Normalize x86_64 0:1.32-521.fc44     fedora       486.0 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-base              noarch 0:2.27-525.fc44     updates       12.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-constant          noarch 0:1.33-522.fc44     fedora        26.2 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-if                noarch 0:0.61.000-525.fc44 updates        5.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-interpreter       x86_64 4:5.42.3-525.fc44   updates      118.8 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-lib               x86_64 0:0.65-525.fc44     updates        8.5 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-libnet            noarch 0:3.15-522.fc44     fedora       289.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-libs              x86_64 4:5.42.3-525.fc44   updates       11.6 MiB
+l/my-custom-os:latest_linux_amd64 =>  perl-locale            noarch 0:1.13-525.fc44     updates        6.1 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-mro               x86_64 0:1.29-525.fc44     updates       41.4 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-overload          noarch 0:1.40-525.fc44     updates       71.6 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-overloading       noarch 0:0.02-525.fc44     updates        4.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-parent            noarch 1:0.244-521.fc44    fedora        10.3 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-podlators         noarch 1:6.0.2-522.fc44    updates      317.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-vars              noarch 0:1.05-525.fc44     updates        3.9 KiB
+l/my-custom-os:latest_linux_amd64 =>  python3-libdnf5        x86_64 0:5.4.6.0-1.fc44    updates       10.5 MiB
+l/my-custom-os:latest_linux_amd64 => Installing weak dependencies:
+l/my-custom-os:latest_linux_amd64 =>  git                    x86_64 0:2.56.0-1.fc44     updates       57.7 KiB
+l/my-custom-os:latest_linux_amd64 =>  perl-NDBM_File         x86_64 0:1.18-525.fc44     updates       28.4 KiB
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => Transaction Summary:
+l/my-custom-os:latest_linux_amd64 =>  Installing:        67 packages
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => Total size of inbound packages is 517 MiB. Need to download 9 MiB.
+l/my-custom-os:latest_linux_amd64 => After this operation, 2 GiB extra will be used (install 2 GiB, remove 0 B).
+l/my-custom-os:latest_linux_amd64 => [ 1/66] git-0:2.56.0-1.fc44.x86_64      100% | 173.8 KiB/s |  40.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 2/66] perl-Getopt-Long-1:2.58-521.fc4 100% |  58.8 KiB/s |  63.6 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [ 3/66] python3-libdnf5-0:5.4.6.0-1.fc4 100% | 556.8 KiB/s |   1.9 MiB |  00m03s
+l/my-custom-os:latest_linux_amd64 => [ 4/66] perl-Git-0:2.56.0-1.fc44.noarch 100% |  11.3 KiB/s |  37.4 KiB |  00m03s
+l/my-custom-os:latest_linux_amd64 => [ 5/66] perl-PathTools-0:3.94-521.fc44. 100% |  33.3 KiB/s |  87.3 KiB |  00m03s
+l/my-custom-os:latest_linux_amd64 => [ 6/66] perl-TermReadKey-0:2.38-27.fc44 100% |  92.6 KiB/s |  35.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 7/66] perl-Exporter-0:5.79-521.fc44.n 100% |  84.0 KiB/s |  30.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 8/66] perl-Pod-Usage-4:2.05-521.fc44. 100% |  49.5 KiB/s |  40.7 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [ 9/66] perl-Text-ParseWords-0:3.31-521 100% |  24.7 KiB/s |  16.5 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [10/66] perl-constant-0:1.33-522.fc44.n 100% |  35.6 KiB/s |  22.9 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [11/66] perl-Error-1:0.17030-3.fc44.noa 100% |  60.7 KiB/s |  40.3 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [12/66] perl-Carp-0:1.54-521.fc44.noarc 100% |  37.6 KiB/s |  28.8 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [13/66] perl-Pod-Perldoc-0:3.28.01-522. 100% | 448.5 KiB/s |  86.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [14/66] perl-Scalar-List-Utils-5:1.70-2 100% |  75.7 KiB/s |  75.4 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [15/66] perl-File-Temp-1:0.231.200-2.fc 100% | 185.0 KiB/s |  59.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [16/66] perl-Pod-Simple-1:3.47-4.fc44.n 100% | 251.1 KiB/s | 220.0 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [17/66] perl-parent-1:0.244-521.fc44.no 100% |  19.9 KiB/s |  14.9 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [18/66] perl-File-Path-0:2.18-522.fc44. 100% |  48.0 KiB/s |  35.3 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [19/66] perl-Pod-Escapes-1:1.07-521.fc4 100% |  42.4 KiB/s |  19.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [20/66] perl-libs-4:5.42.3-525.fc44.x86 100% | 554.5 KiB/s |   2.6 MiB |  00m05s
+l/my-custom-os:latest_linux_amd64 => [21/66] perl-Text-Tabs+Wrap-0:2024.001- 100% |   4.5 KiB/s |  21.8 KiB |  00m05s
+l/my-custom-os:latest_linux_amd64 => [22/66] perl-File-Basename-0:2.86-525.f 100% |   3.7 KiB/s |  16.5 KiB |  00m04s
+l/my-custom-os:latest_linux_amd64 => [23/66] perl-interpreter-4:5.42.3-525.f 100% | 317.2 KiB/s |  71.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [24/66] perl-lib-0:0.65-525.fc44.x86_64 100% |  63.3 KiB/s |  14.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [25/66] perl-IPC-Open3-0:1.24-525.fc44. 100% |  79.3 KiB/s |  23.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [26/66] perl-DynaLoader-0:1.57-525.fc44 100% | 372.2 KiB/s |  25.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [27/66] perl-vars-0:1.05-525.fc44.noarc 100% | 227.6 KiB/s |  12.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [28/66] perl-podlators-1:6.0.2-522.fc44 100% | 410.8 KiB/s | 128.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [29/66] perl-Term-ANSIColor-0:5.01-522. 100% | 142.3 KiB/s |  47.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [30/66] perl-Term-Cap-0:1.18-521.fc44.n 100% |  68.7 KiB/s |  22.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [31/66] perl-Encode-4:3.21-521.fc44.x86 100% | 566.5 KiB/s |   1.1 MiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => [32/66] perl-MIME-Base64-0:3.16-521.fc4 100% |  15.7 KiB/s |  29.8 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => [33/66] perl-Storable-1:3.37-522.fc44.x 100% |  48.8 KiB/s | 100.9 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => [34/66] perl-Symbol-0:1.09-525.fc44.noa 100% |  57.5 KiB/s |  13.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [35/66] perl-if-0:0.61.000-525.fc44.noa 100% |  63.4 KiB/s |  13.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [36/66] perl-overload-0:1.40-525.fc44.n 100% | 404.2 KiB/s |  44.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [37/66] perl-Fcntl-0:1.20-525.fc44.x86_ 100% | 203.2 KiB/s |  29.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [38/66] perl-HTTP-Tiny-0:0.096-1.fc44.n 100% | 263.9 KiB/s |  57.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [39/66] perl-IO-Socket-SSL-0:2.098-2.fc 100% | 249.4 KiB/s | 234.7 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [40/66] perl-Net-SSLeay-0:1.94-12.fc44. 100% | 243.8 KiB/s | 373.4 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => [41/66] perl-Time-HiRes-4:1.9778-521.fc 100% |  37.6 KiB/s |  57.2 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => [42/66] perl-Time-Local-2:1.350-521.fc4 100% |  44.1 KiB/s |  34.5 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [43/66] perl-IO-Socket-IP-0:0.43-522.fc 100% | 190.8 KiB/s |  42.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [44/66] perl-IO-0:1.55-525.fc44.x86_64  100% | 289.0 KiB/s |  81.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [45/66] perl-Errno-0:1.38-525.fc44.x86_ 100% |  59.4 KiB/s |  14.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [46/66] perl-AutoLoader-0:5.74-525.fc44 100% | 108.1 KiB/s |  20.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [47/66] perl-Socket-4:2.043-1.fc44.x86_ 100% | 413.5 KiB/s |  55.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [48/66] perl-URI-0:5.36-1.fc44.noarch   100% | 383.7 KiB/s | 149.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [49/66] perl-MIME-Base32-0:1.303-25.fc4 100% |  53.0 KiB/s |  20.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [50/66] perl-Unicode-Normalize-0:1.32-5 100% | 175.5 KiB/s |  74.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [51/66] perl-libnet-0:3.15-522.fc44.noa 100% | 166.5 KiB/s | 128.4 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [52/66] perl-Digest-MD5-0:2.59-521.fc44 100% |  44.9 KiB/s |  36.0 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [53/66] perl-Digest-0:1.20-521.fc44.noa 100% |  34.5 KiB/s |  24.9 KiB |  00m01s
+l/my-custom-os:latest_linux_amd64 => [54/66] perl-POSIX-0:2.23-525.fc44.x86_ 100% | 359.4 KiB/s |  96.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [55/66] perl-base-0:2.27-525.fc44.noarc 100% |  67.8 KiB/s |  15.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [56/66] perl-Getopt-Std-0:1.14-525.fc44 100% |  57.5 KiB/s |  15.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [57/66] perl-mro-0:1.29-525.fc44.x86_64 100% | 280.0 KiB/s |  29.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [58/66] perl-overloading-0:0.02-525.fc4 100% | 128.5 KiB/s |  12.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [59/66] perl-Data-Dumper-0:2.192-523.fc 100% | 511.5 KiB/s |  56.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [60/66] perl-locale-0:1.13-525.fc44.noa 100% | 101.6 KiB/s |  12.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [61/66] perl-File-stat-0:1.14-525.fc44. 100% | 104.2 KiB/s |  16.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [62/66] perl-SelectSaver-0:1.02-525.fc4 100% | 167.2 KiB/s |  11.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [63/66] perl-Class-Struct-0:0.68-525.fc 100% | 245.9 KiB/s |  21.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [64/66] perl-FileHandle-0:2.05-525.fc44 100% | 242.7 KiB/s |  14.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [65/66] perl-B-0:1.89-525.fc44.x86_64   100% | 467.4 KiB/s | 177.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [66/66] perl-NDBM_File-0:1.18-525.fc44. 100% |  60.6 KiB/s |  21.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => --------------------------------------------------------------------------------
+l/my-custom-os:latest_linux_amd64 => [66/66] Total                           100% | 469.5 KiB/s |   8.9 MiB |  00m19s
+l/my-custom-os:latest_linux_amd64 => Running transaction
+l/my-custom-os:latest_linux_amd64 => [ 1/69] Verify package files            100% |  26.0   B/s |  67.0   B |  00m03s
+l/my-custom-os:latest_linux_amd64 => >>> Running %pretrans scriptlet: chatgpt-0:26.930.61225-1.x86_64
+l/my-custom-os:latest_linux_amd64 => >>> Finished %pretrans scriptlet: chatgpt-0:26.930.61225-1.x86_64
+l/my-custom-os:latest_linux_amd64 => >>> [RPM] /tmp/files/dnf/chatgpt.x86_64.rpm: Header OpenPGP V4 RSA/SHA512 signature, key ID 4a3b4a566c4660e4: NOKEY
+l/my-custom-os:latest_linux_amd64 => [ 2/69] Prepare transaction             100% |  92.0   B/s |  67.0   B |  00m01s
+l/my-custom-os:latest_linux_amd64 => [ 3/69] Installing perl-Digest-0:1.20-5 100% |   4.5 MiB/s |  37.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 4/69] Installing perl-FileHandle-0:2. 100% |   4.8 MiB/s |   9.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 5/69] Installing perl-B-0:1.89-525.fc 100% |  61.6 MiB/s | 504.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 6/69] Installing perl-Digest-MD5-0:2. 100% |  20.0 MiB/s |  61.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 7/69] Installing perl-libnet-0:3.15-5 100% |  41.1 MiB/s | 294.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 8/69] Installing perl-Data-Dumper-0:2 100% |  28.7 MiB/s | 117.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [ 9/69] Installing perl-Unicode-Normali 100% | 119.2 MiB/s | 488.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [10/69] Installing perl-MIME-Base32-0:1 100% |  10.5 MiB/s |  32.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [11/69] Installing perl-URI-0:5.36-1.fc 100% |  20.2 MiB/s | 289.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [12/69] Installing perl-IO-Socket-IP-0: 100% |  33.3 MiB/s | 102.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [13/69] Installing perl-AutoLoader-0:5. 100% |  20.5 MiB/s |  21.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [14/69] Installing perl-IO-Socket-SSL-0 100% | 101.5 MiB/s | 727.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [15/69] Installing perl-locale-0:1.13-5 100% |   3.2 MiB/s |   6.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [16/69] Installing perl-Net-SSLeay-0:1. 100% |  70.9 MiB/s |   1.3 MiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [17/69] Installing perl-File-Path-0:2.1 100% |  21.0 MiB/s |  64.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [18/69] Installing perl-Time-Local-2:1. 100% |  34.5 MiB/s |  70.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [19/69] Installing perl-Time-HiRes-4:1. 100% |  28.7 MiB/s | 117.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [20/69] Installing perl-if-0:0.61.000-5 100% |   3.0 MiB/s |   6.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [21/69] Installing perl-Pod-Escapes-1:1 100% |  12.7 MiB/s |  25.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [22/69] Installing perl-Text-Tabs+Wrap- 100% |  11.7 MiB/s |  23.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [23/69] Installing perl-HTTP-Tiny-0:0.0 100% |  40.2 MiB/s | 164.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [24/69] Installing perl-Class-Struct-0: 100% |  12.7 MiB/s |  25.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [25/69] Installing perl-IPC-Open3-0:1.2 100% |  13.9 MiB/s |  28.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [26/69] Installing perl-File-Temp-1:0.2 100% |  53.9 MiB/s | 165.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [27/69] Installing perl-POSIX-0:2.23-52 100% |  45.0 MiB/s | 230.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [28/69] Installing perl-Pod-Simple-1:3. 100% |  51.0 MiB/s | 574.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [29/69] Installing perl-Term-Cap-0:1.18 100% |  14.9 MiB/s |  30.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [30/69] Installing perl-Term-ANSIColor- 100% |  32.3 MiB/s |  99.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [31/69] Installing perl-Pod-Perldoc-0:3 100% |   3.6 MiB/s | 169.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [32/69] Installing perl-podlators-1:6.0 100% |  12.6 MiB/s | 321.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [33/69] Installing perl-File-stat-0:1.1 100% |   6.4 MiB/s |  13.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [34/69] Installing perl-SelectSaver-0:1 100% |   2.6 MiB/s |   2.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [35/69] Installing perl-Socket-4:2.043- 100% |  30.2 MiB/s | 123.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [36/69] Installing perl-Symbol-0:1.09-5 100% |   7.1 MiB/s |   7.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [37/69] Installing perl-Pod-Usage-4:2.0 100% |   3.9 MiB/s |  87.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [38/69] Installing perl-IO-0:1.55-525.f 100% |  24.7 MiB/s | 151.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [39/69] Installing perl-overloading-0:0 100% |   2.7 MiB/s |   5.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [40/69] Installing perl-mro-0:1.29-525. 100% |  20.8 MiB/s |  42.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [41/69] Installing perl-base-0:2.27-525 100% |  12.7 MiB/s |  13.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [42/69] Installing perl-Fcntl-0:1.20-52 100% |  24.3 MiB/s |  49.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [43/69] Installing perl-Text-ParseWords 100% |   7.1 MiB/s |  14.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [44/69] Installing perl-Getopt-Long-1:2 100% |  35.9 MiB/s | 147.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [45/69] Installing perl-Storable-1:3.37 100% |  57.8 MiB/s | 236.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [46/69] Installing perl-overload-0:1.40 100% |  35.2 MiB/s |  72.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [47/69] Installing perl-Getopt-Std-0:1. 100% |  11.5 MiB/s |  11.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [48/69] Installing perl-Errno-0:1.38-52 100% |   8.6 MiB/s |   8.8 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [49/69] Installing perl-MIME-Base64-0:3 100% |  10.8 MiB/s |  44.2 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [50/69] Installing perl-vars-0:1.05-525 100% |   4.2 MiB/s |   4.3 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [51/69] Installing perl-File-Basename-0 100% |   7.1 MiB/s |  14.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [52/69] Installing perl-parent-1:0.244- 100% |   5.4 MiB/s |  11.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [53/69] Installing perl-Scalar-List-Uti 100% |  24.2 MiB/s | 148.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [54/69] Installing perl-constant-0:1.33 100% |  13.4 MiB/s |  27.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [55/69] Installing perl-Encode-4:3.21-5 100% |  93.9 MiB/s |   4.7 MiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [56/69] Installing perl-PathTools-0:3.9 100% |  25.7 MiB/s | 184.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [57/69] Installing perl-DynaLoader-0:1. 100% |  15.9 MiB/s |  32.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [58/69] Installing perl-Carp-0:1.54-521 100% |  23.3 MiB/s |  47.7 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [59/69] Installing perl-Exporter-0:5.79 100% |  13.6 MiB/s |  55.6 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [60/69] Installing perl-libs-4:5.42.3-5 100% |  89.1 MiB/s |  11.7 MiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [61/69] Installing perl-interpreter-4:5 100% |   5.1 MiB/s | 120.5 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [62/69] Installing perl-TermReadKey-0:2 100% |  16.1 MiB/s |  66.1 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [63/69] Installing perl-Error-1:0.17030 100% |  19.5 MiB/s |  80.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [64/69] Installing perl-lib-0:0.65-525. 100% |   8.7 MiB/s |   8.9 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [65/69] Installing git-0:2.56.0-1.fc44. 100% |   5.2 MiB/s |  59.0 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [66/69] Installing perl-Git-0:2.56.0-1. 100% |  21.3 MiB/s |  65.4 KiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [67/69] Installing python3-libdnf5-0:5. 100% | 194.4 MiB/s |  10.5 MiB |  00m00s
+l/my-custom-os:latest_linux_amd64 => [68/69] Installing chatgpt-0:26.930.612 100% |  63.5 MiB/s |   1.5 GiB |  00m24s
+l/my-custom-os:latest_linux_amd64 => [69/69] Installing perl-NDBM_File-0:1.1 100% |  12.4 KiB/s |  29.5 KiB |  00m02s
+l/my-custom-os:latest_linux_amd64 => Warning: skipped OpenPGP checks for 1 package from repository: @commandline
+l/my-custom-os:latest_linux_amd64 => Complete!
+l/my-custom-os:latest_linux_amd64 => =============================== End 'dnf' Module ===============================
+l/my-custom-os:latest_linux_amd64 => --> 0a6e4ca33c36
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 21/33: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/files:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'files' '{"type":"files","files":[{"usr":"/usr"},{"etc":"/etc"}]}'
+l/my-custom-os:latest_linux_amd64 => ============================= Start 'files' Module =============================
+l/my-custom-os:latest_linux_amd64 => Adding files to image
+l/my-custom-os:latest_linux_amd64 => ATTENTION: You are using the legacy module recipe format.
+l/my-custom-os:latest_linux_amd64 =>            It is advised to switch to the new module recipe format,
+l/my-custom-os:latest_linux_amd64 =>            which contains 'source' & 'destination' YAML keys.
+l/my-custom-os:latest_linux_amd64 =>            For more details, please visit 'files' module documentation:
+l/my-custom-os:latest_linux_amd64 =>            https://blue-build.org/reference/modules/files/
+l/my-custom-os:latest_linux_amd64 => Copying /tmp/files/usr/* to /usr
+l/my-custom-os:latest_linux_amd64 => ATTENTION: You are using the legacy module recipe format.
+l/my-custom-os:latest_linux_amd64 =>            It is advised to switch to the new module recipe format,
+l/my-custom-os:latest_linux_amd64 =>            which contains 'source' & 'destination' YAML keys.
+l/my-custom-os:latest_linux_amd64 =>            For more details, please visit 'files' module documentation:
+l/my-custom-os:latest_linux_amd64 =>            https://blue-build.org/reference/modules/files/
+l/my-custom-os:latest_linux_amd64 => Copying /tmp/files/etc/* to /etc
+l/my-custom-os:latest_linux_amd64 => ============================== End 'files' Module ==============================
+l/my-custom-os:latest_linux_amd64 => --> b3d71d74b9a0
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 22/33: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/systemd:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'systemd' '{"type":"systemd","system":{"masked":["NetworkManager-wait-online.service","fedora-atomic-desktop-appstream-cache-refresh.service"],"enabled":["bootc-fetch-apply-updates.timer","nvpn.service","firewalld.service","tailscaled.service"]},"user":{"enabled":["taildrop.service"]}}'
+l/my-custom-os:latest_linux_amd64 => ============================ Start 'systemd' Module ============================
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/multi-user.target.wants/nvpn.service' → '/etc/systemd/system/nvpn.service'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/multi-user.target.wants/tailscaled.service' → '/usr/lib/systemd/system/tailscaled.service'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/NetworkManager-wait-online.service' → '/dev/null'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/fedora-atomic-desktop-appstream-cache-refresh.service' → '/dev/null'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/user/default.target.wants/taildrop.service' → '/usr/lib/systemd/user/taildrop.service'.
+l/my-custom-os:latest_linux_amd64 => ============================= End 'systemd' Module =============================
+l/my-custom-os:latest_linux_amd64 => --> 4edc0399415a
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 23/33: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/kargs:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'kargs' '{"type":"kargs","kargs":["rd.driver.pre=amdgpu"]}'
+l/my-custom-os:latest_linux_amd64 => ============================= Start 'kargs' Module =============================
+l/my-custom-os:latest_linux_amd64 => Writing following kernel arguments to kargs.d TOML file: "rd.driver.pre=amdgpu"
+l/my-custom-os:latest_linux_amd64 => ============================== End 'kargs' Module ==============================
+l/my-custom-os:latest_linux_amd64 => --> 95087ca60471
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 24/33: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'script' '{"type":"script","snippets":["rm -f /etc/greenboot/check/required.d/01-cosmic-health.sh","chmod +x /usr/libexec/ideapad-battery-helper","chmod 0440 /etc/sudoers.d/ideapad-battery","chmod 0440 /etc/sudoers.d/bootc-nopasswd","echo \u0027/usr/bin/nu\u0027 \u003e\u003e /etc/shells","firewall-offline-cmd --add-port=53317/tcp","firewall-offline-cmd --add-port=53317/udp","firewall-offline-cmd --zone=trusted --add-interface=tailscale0","echo \u0027ControllerMode = bredr\u0027 \u003e\u003e /etc/bluetooth/main.conf","glib-compile-schemas /usr/share/glib-2.0/schemas/","mkdir -p /etc/containers/registries.conf.d/\ncat \u003c\u003cEOF \u003e /etc/containers/registries.conf.d/99-tailscale.conf\n[[registry]]\nlocation = \"tomahawk-fedora.taila950fb.ts.net:5000\"\ninsecure = true\n\n[[registry]]\nlocation = \"localhost:5000\"\ninsecure = true\nEOF\n","mkdir -p /etc/udev/rules.d\necho \u0027SUBSYSTEM==\"i2c-dev\", KERNEL==\"i2c-[0-9]*\", TAG+=\"uaccess\"\u0027 \u003e /etc/udev/rules.d/99-ddcutil-uaccess.rules\n"]}'
+l/my-custom-os:latest_linux_amd64 => ============================ Start 'script' Module ============================
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mrm -f /etc/greenboot/check/required.d/01-cosmic-health.sh[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mrm -f /etc/greenboot/check/required.d/01-cosmic-health.sh[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod +x /usr/libexec/ideapad-battery-helper[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod +x /usr/libexec/ideapad-battery-helper[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/ideapad-battery[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/ideapad-battery[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/bootc-nopasswd[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/bootc-nopasswd[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho '/usr/bin/nu' >> /etc/shells[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho '/usr/bin/nu' >> /etc/shells[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/tcp[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/tcp[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/udp[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/udp[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --zone=trusted --add-interface=tailscale0[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --zone=trusted --add-interface=tailscale0[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho 'ControllerMode = bredr' >> /etc/bluetooth/main.conf[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho 'ControllerMode = bredr' >> /etc/bluetooth/main.conf[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mglib-compile-schemas /usr/share/glib-2.0/schemas/[0m
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.IBus.Chewing” has path “/desktop/ibus/engine/chewing/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus” has path “/desktop/ibus/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.general” has path “/desktop/ibus/general/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.general.hotkey” has path “/desktop/ibus/general/hotkey/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.panel” has path “/desktop/ibus/panel/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.panel.emoji” has path “/desktop/ibus/panel/emoji/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.crypto.cache” has path “/desktop/gnome/crypto/cache/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.crypto.pgp” has path “/desktop/gnome/crypto/pgp/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.locale” has path “/system/locale/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy” has path “/system/proxy/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.http” has path “/system/proxy/http/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.https” has path “/system/proxy/https/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.ftp” has path “/system/proxy/ftp/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.socks” has path “/system/proxy/socks/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mglib-compile-schemas /usr/share/glib-2.0/schemas/[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/containers/registries.conf.d/
+l/my-custom-os:latest_linux_amd64 => cat <<EOF > /etc/containers/registries.conf.d/99-tailscale.conf
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "tomahawk-fedora.taila950fb.ts.net:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "localhost:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => EOF
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/containers/registries.conf.d/
+l/my-custom-os:latest_linux_amd64 => cat <<EOF > /etc/containers/registries.conf.d/99-tailscale.conf
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "tomahawk-fedora.taila950fb.ts.net:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "localhost:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => EOF
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/udev/rules.d
+l/my-custom-os:latest_linux_amd64 => echo 'SUBSYSTEM=="i2c-dev", KERNEL=="i2c-[0-9]*", TAG+="uaccess"' > /etc/udev/rules.d/99-ddcutil-uaccess.rules
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/udev/rules.d
+l/my-custom-os:latest_linux_amd64 => echo 'SUBSYSTEM=="i2c-dev", KERNEL=="i2c-[0-9]*", TAG+="uaccess"' > /etc/udev/rules.d/99-ddcutil-uaccess.rules
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mDone[0m
+l/my-custom-os:latest_linux_amd64 => ============================= End 'script' Module =============================
+l/my-custom-os:latest_linux_amd64 => --> d643392227e8
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 25/33: RUN --mount=type=bind,src=.bluebuild-scripts_,dst=/scripts/,Z   /scripts/post_build.sh
+l/my-custom-os:latest_linux_amd64 => --> afe20674dab2
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 26/33: LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/blue-build/cli/main/README.md"
+l/my-custom-os:latest_linux_amd64 => --> 1404c4cee739
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 27/33: LABEL org.blue-build.build-id="ffda6974-12b1-4610-8a64-b1d7d0ce01bb"
+l/my-custom-os:latest_linux_amd64 => --> aaa36b9eccec
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 28/33: LABEL org.opencontainers.image.base.digest="sha256:644c16263fa4168a065c47a17294232e5fc4db095dbd5fa0af7a19ea6cd2cd03"
+l/my-custom-os:latest_linux_amd64 => --> c8218f73cebc
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 29/33: LABEL org.opencontainers.image.base.name="ghcr.io/blue-build/base-images/fedora-cosmic:44"
+l/my-custom-os:latest_linux_amd64 => --> 0c1360663a95
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 30/33: LABEL org.opencontainers.image.created="2026-10-08T04:23:46.690763525+00:00"
+l/my-custom-os:latest_linux_amd64 => --> 5d128fdabe7f
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 31/33: LABEL org.opencontainers.image.description="Custom Fedora COSMIC Atomic with BlueBuild"
+l/my-custom-os:latest_linux_amd64 => --> 01cb859395de
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 32/33: LABEL org.opencontainers.image.source=""
+l/my-custom-os:latest_linux_amd64 => --> d1cd4fdd129b
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 33/33: LABEL org.opencontainers.image.title="my-custom-os"
+l/my-custom-os:latest_linux_amd64 => [5/5] COMMIT localhost/my-custom-os:latest_linux_amd64
+l/my-custom-os:latest_linux_amd64 => --> a2eae129183d
+l/my-custom-os:latest_linux_amd64 => Successfully tagged localhost/my-custom-os:latest_linux_amd64
+l/my-custom-os:latest_linux_amd64 => a2eae129183d4a22f56fa9fba9b638930af7aa7233383b9e61e64ff226cd0fc6
+INFO  => Successfully built localhost/my-custom-os:latest_linux_amd64
+INFO  => Finished building:
+	- localhost/my-custom-os:latest
+	- localhost/my-custom-os:20261008
+	- localhost/my-custom-os:44
+	- localhost/my-custom-os:20261008-44

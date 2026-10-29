@@ -1,0 +1,11 @@
+# Base model (adjust tag if using a different variant like qwen2.5:1.5b)
+FROM qwen3.5:2b
+
+# Limit context window to reduce memory/compute load (default is 4096)
+PARAMETER num_ctx 64000
+
+# Match exact physical cores for Ryzen 5 4500U to avoid CPU bottleneck
+PARAMETER num_thread 6
+
+# Batch processing setting for CPU speed optimization
+PARAMETER num_batch 512

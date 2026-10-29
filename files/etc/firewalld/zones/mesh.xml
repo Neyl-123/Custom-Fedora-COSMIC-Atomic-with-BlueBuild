@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<zone>
+  <short>Mesh</short>
+  <description>Trusted Mesh Zone for Nostr VPN</description>
+  <!-- Virtual network interfaces created by Nostr VPN -->
+  <interface name="wg0"/>
+  <interface name="nostr0"/>
+  
+  <!-- Selective Port Allowances for local discovery tools -->
+  
+  <!-- LocalSend -->
+  <port port="53317" protocol="tcp"/>
+  <port port="53317" protocol="udp"/>
+  
+  <!-- KDE Connect -->
+  <port port="1714-1764" protocol="tcp"/>
+  <port port="1714-1764" protocol="udp"/>
+  
+  <!-- Allow basic necessary services on this trusted zone if needed -->
+  <service name="ssh"/>
+</zone>

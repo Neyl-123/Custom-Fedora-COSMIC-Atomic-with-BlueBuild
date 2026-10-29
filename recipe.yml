@@ -1,0 +1,71 @@
+name: my-custom-os
+description: "Custom Fedora COSMIC Atomic with BlueBuild"
+
+base-image: ghcr.io/blue-build/base-images/fedora-cosmic
+image-version: 44
+
+modules:
+  - type: containerfile
+    snippets:
+      - COPY scripts/build-custom-battery-applet.sh /tmp/
+      - RUN chmod +x /tmp/build-custom-battery-applet.sh && /tmp/build-custom-battery-applet.sh && rm /tmp/build-custom-battery-applet.sh
+      - COPY scripts/install-nvpn.sh /tmp/
+      - RUN chmod +x /tmp/install-nvpn.sh && /tmp/install-nvpn.sh && rm /tmp/install-nvpn.sh
+      - RUN dnf copr enable -y atim/nushell
+      - RUN dnf install -y firewalld fish gnome-console tailscale waypipe gcc make curl file nushell hunspell-de ddcutil yt-dlp ffmpeg && dnf clean all
+      - RUN dnf remove -y gnome-system-monitor && dnf clean all
+      
+  - type: dnf
+    install:
+      packages:
+        - chatgpt.x86_64.rpm
+
+  - type: files
+    files:
+      - usr: /usr
+      - etc: /etc
+
+  - type: systemd
+    system:
+      masked:
+        - NetworkManager-wait-online.service
+        - fedora-atomic-desktop-appstream-cache-refresh.service
+      enabled:
+        - bootc-fetch-apply-updates.timer
+        - nvpn.service
+        - firewalld.service
+        - tailscaled.service
+    user:
+      enabled:
+        - taildrop.service
+
+  - type: kargs
+    kargs:
+      - rd.driver.pre=amdgpu
+
+  - type: script
+    snippets:
+      - "rm -f /etc/greenboot/check/required.d/01-cosmic-health.sh"
+      - "chmod +x /usr/libexec/ideapad-battery-helper"
+      - "chmod 0440 /etc/sudoers.d/ideapad-battery"
+      - "chmod 0440 /etc/sudoers.d/bootc-nopasswd"
+      - "echo '/usr/bin/nu' >> /etc/shells"
+      - "firewall-offline-cmd --add-port=53317/tcp"
+      - "firewall-offline-cmd --add-port=53317/udp"
+      - "firewall-offline-cmd --zone=trusted --add-interface=tailscale0"
+      - "echo 'ControllerMode = bredr' >> /etc/bluetooth/main.conf"
+      - "glib-compile-schemas /usr/share/glib-2.0/schemas/"
+      - |
+        mkdir -p /etc/containers/registries.conf.d/
+        cat <<EOF > /etc/containers/registries.conf.d/99-tailscale.conf
+        [[registry]]
+        location = "tomahawk-fedora.taila950fb.ts.net:5000"
+        insecure = true
+        
+        [[registry]]
+        location = "localhost:5000"
+        insecure = true
+        EOF
+      - |
+        mkdir -p /etc/udev/rules.d
+        echo 'SUBSYSTEM=="i2c-dev", KERNEL=="i2c-[0-9]*", TAG+="uaccess"' > /etc/udev/rules.d/99-ddcutil-uaccess.rules

@@ -1,0 +1,3 @@
+[org.gnome.Console]
+font-scale=1.5
+shell=['/usr/bin/fish', '-i']

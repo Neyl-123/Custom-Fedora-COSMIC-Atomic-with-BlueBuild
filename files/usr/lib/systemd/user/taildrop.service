@@ -1,0 +1,10 @@
+[Unit]
+Description=Taildrop Auto-Receiver
+After=tailscaled.service
+
+[Service]
+ExecStart=/usr/bin/tailscale file get --loop /var/home/michael/Downloads
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

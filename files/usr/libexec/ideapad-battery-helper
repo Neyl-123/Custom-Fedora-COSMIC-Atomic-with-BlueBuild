@@ -1,0 +1,31 @@
+#!/bin/bash
+# Helper script to manage IdeaPad battery conservation mode
+
+# Use globbing to naturally follow the symlink in sysfs
+for f in /sys/bus/platform/drivers/ideapad_acpi/*/conservation_mode; do
+    if [ -f "$f" ]; then
+        sysfs_path="$f"
+        break
+    fi
+done
+
+if [ -z "$sysfs_path" ]; then
+    echo "0"
+    exit 1
+fi
+
+case "$1" in
+    status)
+        cat "$sysfs_path"
+        ;;
+    1)
+        echo 1 > "$sysfs_path"
+        ;;
+    0)
+        echo 0 > "$sysfs_path"
+        ;;
+    *)
+        echo "Usage: $0 {status|1|0}"
+        exit 1
+        ;;
+esac

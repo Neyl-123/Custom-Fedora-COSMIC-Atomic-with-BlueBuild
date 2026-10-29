@@ -1,0 +1,15 @@
+[Unit]
+Description=Nostr VPN daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/nvpn daemon --service --config /etc/nvpn/nvpn.json --iface nvpn0 --mesh-refresh-interval-secs 60
+Restart=always
+RestartSec=3
+StandardOutput=append:/var/log/nvpn.log
+StandardError=append:/var/log/nvpn.log
+
+[Install]
+WantedBy=multi-user.target

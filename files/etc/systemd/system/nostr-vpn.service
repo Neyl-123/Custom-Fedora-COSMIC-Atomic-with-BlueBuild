@@ -1,0 +1,16 @@
+[Unit]
+Description=Nostr VPN Daemon
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/nostr-vpn
+Restart=on-failure
+RestartSec=5
+# Run as root required for creating network interfaces and routing
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target

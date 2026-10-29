@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+import sys, json, subprocess, os, shutil, textwrap
+
+# ANSI Colors for beautiful formatting without relying on terminal width
+RESET = "\033[0m"
+BOLD = "\033[1m"
+BLUE = "\033[94m"
+GREEN = "\033[92m"
+YELLOW = "\033[93m"
+GRAY = "\033[90m"
+
+def run_cmd(cmd):
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, check=True)
+        return result.stdout.strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command {' '.join(cmd)}: {e.stderr}", file=sys.stderr)
+        sys.exit(1)
+
+def main():
+    try:
+        output = run_cmd(["ostree", "admin", "status", "--json"])
+        data = json.loads(output)
+    except Exception as e:
+        print(f"Failed to parse OSTree status. Are you on an ostree system? Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    deployments = data.get("deployments", [])
+    if not deployments:
+        if isinstance(data, list): deployments = data
+        else:
+            print("No deployments found.")
+            sys.exit(0)
+
+    print(f"\n{BOLD}{BLUE}OSTREE DEPLOYMENT VIEWER{RESET}\n")
+    
+    for i, dep in enumerate(deployments):
+        osname = dep.get("osname", "fedora")
+        checksum = dep.get("checksum", "")
+        serial = dep.get("serial", 0)
+        booted = dep.get("booted", False)
+        pinned = dep.get("pinned", False)
+        
+        desc_path = f"/ostree/deploy/{osname}/deploy/{checksum}.{serial}/etc/image-description"
+        if not os.path.exists(desc_path):
+            dep_id = dep.get("id", "")
+            alt_path = f"/ostree/deploy/{osname}/deploy/{dep_id}/etc/image-description"
+            if os.path.exists(alt_path):
+                desc_path = alt_path
+        
+        description = "No built-in description found."
+        if os.path.exists(desc_path):
+            try:
+                with open(desc_path, "r") as f: description = f.read().strip()
+            except Exception: pass
+                
+        flags = []
+        if booted: flags.append(f"{GREEN}CURRENTLY BOOTED{RESET}")
+        if pinned: flags.append(f"{YELLOW}PINNED{RESET}")
+        flag_str = " [" + ", ".join(flags) + "]" if flags else ""
+        
+        print(f"{BOLD}Deployment {i}:{RESET} {checksum[:12]}{flag_str}")
+        
+        term_width = shutil.get_terminal_size(fallback=(80, 24)).columns
+        indent_len = 15
+        indent_str = " " * indent_len
+        
+        # Semantically parse BlueBuild's description format and wrap at word boundaries
+        if " | " in description:
+            parts = description.split(" | ")
+            
+            # Wrap the first part
+            wrapper = textwrap.TextWrapper(width=term_width, initial_indent="", subsequent_indent=indent_str)
+            formatted_desc = wrapper.fill(parts[0])
+            
+            for part in parts[1:]:
+                if "; " in part:
+                    sub_parts = part.split("; ")
+                    for sub in sub_parts:
+                        sub_wrapper = textwrap.TextWrapper(width=term_width, initial_indent=f"\n{indent_str}- ", subsequent_indent=f"{indent_str}  ")
+                        formatted_desc += sub_wrapper.fill(sub)
+                else:
+                    sub_wrapper = textwrap.TextWrapper(width=term_width, initial_indent=f"\n{indent_str}", subsequent_indent=indent_str)
+                    formatted_desc += sub_wrapper.fill(part)
+        else:
+            wrapper = textwrap.TextWrapper(width=term_width, initial_indent="", subsequent_indent=indent_str)
+            formatted_desc = wrapper.fill(description)
+            
+        print(f"  {GRAY}Description:{RESET} {formatted_desc}\n")
+
+if __name__ == "__main__":
+    main()

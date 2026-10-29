@@ -1,0 +1,13 @@
+[terminal]
+vt = "1"
+
+[general]
+service = "cosmic-greeter"
+
+[initial_session]
+command = "bash -l -c 'sleep 2 && start-cosmic'"
+user = "michael"
+
+[default_session]
+command = "cosmic-greeter-start"
+user = "cosmic-greeter"

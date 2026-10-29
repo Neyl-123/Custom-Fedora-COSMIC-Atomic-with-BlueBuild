@@ -1,0 +1,327 @@
+#!/usr/bin/env python3
+"""
+deploy-os: A dynamic Curses Dashboard for OSTree/bootc Deployment Management.
+Parses OSTree status and provides an interactive pipeline for OS building and upgrading.
+Run this from your OS project directory to include your local build.sh script!
+"""
+import curses
+import subprocess
+import sys
+import os
+import json
+import glob
+import socket
+import textwrap
+
+PREFLIGHT_TIMEOUT = 6  # seconds; a healthy tailnet answers in well under 1s
+
+def booted_image_ref():
+    """Return (ref, origin_path) for the booted deployment's container image."""
+    try:
+        output = subprocess.check_output(["ostree", "admin", "status", "--json"], text=True)
+        deployments = json.loads(output).get("deployments", [])
+    except Exception:
+        deployments = []
+
+    candidates = []
+    for dep in deployments:
+        if dep.get("booted"):
+            osname = dep.get("osname") or "fedora"
+            candidates.append(
+                f"/ostree/deploy/{osname}/deploy/{dep.get('checksum','')}.{dep.get('serial',0)}.origin"
+            )
+            break
+    candidates.extend(sorted(glob.glob("/ostree/deploy/*/deploy/*.origin")))
+
+    for path in candidates:
+        try:
+            with open(path) as f:
+                for line in f:
+                    if line.strip().startswith("container-image-reference="):
+                        return line.split("=", 1)[1].strip(), path
+        except OSError:
+            continue
+    return None, None
+
+def parse_endpoint(ref):
+    """Strip container transports and split out (host, port)."""
+    for prefix in ("ostree-unverified-registry:", "ostree-verify-registry:",
+                   "docker://", "docker:", "registry:"):
+        if ref.startswith(prefix):
+            ref = ref[len(prefix):]
+            break
+    hostport = ref.split("/", 1)[0]
+    if hostport.startswith("["):  # IPv6 literal, e.g. [fd7a::1]:5000
+        host, _, rest = hostport.partition("]")
+        return host[1:], int(rest.lstrip(":") or 443)
+    if ":" in hostport:
+        host, _, port = hostport.rpartition(":")
+        try:
+            return host, int(port)
+        except ValueError:
+            return hostport, None
+    return hostport, None
+
+def tower_peer_state():
+    """Return the tailscale status line for the tower peer, or None if unavailable.
+
+    An offline Tailscale peer blackholes SYNs, so probing it just burns the
+    timeout. The peer line says 'offline, last seen 26d ago' instantly.
+    """
+    try:
+        out = subprocess.check_output(["tailscale", "status"], text=True,
+                                      stderr=subprocess.DEVNULL, timeout=5)
+    except Exception:
+        return None
+    for line in out.splitlines():
+        fields = line.split()
+        # Hostname is the second field; match it exactly to avoid m2102j20sg etc.
+        if len(fields) > 1 and fields[1] == "tomahawk-fedora":
+            return " ".join(line.split())
+    return None
+
+def preflight_upgrade():
+    """Fail fast if the image registry is unreachable.
+
+    bootc logs 'Fetching ...' to the journal only, so when the registry is down
+    it prints nothing and blocks until interrupted. Check first instead.
+    """
+    peer = tower_peer_state()
+    if peer and ("offline" in peer or "stopped" in peer):
+        print(f"\n\033[1;31m❌ Tower-PC is not online on the tailnet.\033[0m")
+        print(f"    tailscale status: {peer}")
+        print("    bootc would hang silently fetching with no output. Aborting instead.")
+        print("    The tower is in Augsburg, ~500km from Berlin, and has been off 26 days.")
+        print("    You need someone there to power it on, or a smart plug + Wake-on-LAN.")
+        print("    Nothing is wrong with your setup; this pipeline simply cannot run until then.")
+        return False
+
+    ref, origin = booted_image_ref()
+    if not ref:
+        print("\033[1;33m⚠ No container-image-reference found; skipping registry preflight.\033[0m")
+        return True
+
+    host, port = parse_endpoint(ref)
+    if not host:
+        print(f"\033[1;33m⚠ Cannot parse a host from {ref!r}; skipping preflight.\033[0m")
+        return True
+    port = port or 443
+    endpoint = f"{host}:{port}"
+
+    print(f"\033[1;36m==> Pre-flight: probing {endpoint}\033[0m")
+    print(f"    image: {ref}")
+    try:
+        with socket.create_connection((host, port), timeout=PREFLIGHT_TIMEOUT):
+            print(f"\033[1;32m==> Pre-flight OK: {endpoint} reachable.\033[0m\n")
+            return True
+    except OSError as e:
+        print(f"\n\033[1;31m❌ Registry unreachable: {endpoint} ({e.strerror or e})\033[0m")
+        print(f"    ref source: {origin}")
+        print("    bootc would hang silently here with no output. Aborting instead.")
+        print("    Fix: power on the build host, or point the deployment at a reachable registry.")
+        return False
+
+def fetch_deployments(width):
+    try:
+        output = subprocess.check_output(["ostree", "admin", "status", "--json"], text=True)
+        data = json.loads(output)
+        deployments = data.get("deployments", []) if isinstance(data, dict) else data
+    except Exception:
+        return [("Failed to fetch deployments.", False, False)], 0
+        
+    lines = []
+    booted_index = 0
+    for i, dep in enumerate(deployments):
+        osname = dep.get("osname", "fedora")
+        checksum = dep.get("checksum", "")
+        serial = dep.get("serial", 0)
+        booted = dep.get("booted", False)
+        pinned = dep.get("pinned", False)
+        if booted:
+            booted_index = i
+        
+        desc_path = f"/ostree/deploy/{osname}/deploy/{checksum}.{serial}/etc/image-description"
+        if not os.path.exists(desc_path):
+            dep_id = dep.get("id", "")
+            alt_path = f"/ostree/deploy/{osname}/deploy/{dep_id}/etc/image-description"
+            if os.path.exists(alt_path):
+                desc_path = alt_path
+                
+        description = "No built-in description found."
+        if os.path.exists(desc_path):
+            try:
+                with open(desc_path, "r") as f: description = f.read().strip()
+            except Exception: pass
+            
+        flags = []
+        if booted: flags.append("CURRENTLY BOOTED")
+        if pinned: flags.append("PINNED")
+        flag_str = " [" + ", ".join(flags) + "]" if flags else ""
+        
+        lines.append((f"Deployment {i}: {checksum[:12]}{flag_str}", True, booted))
+        
+        indent = "    "
+        wrapper = textwrap.TextWrapper(width=width - 2, initial_indent=indent, subsequent_indent=indent)
+        
+        if " | " in description:
+            parts = description.split(" | ")
+            # Process wrapper.fill() which returns a string with newlines. We need to split it by newline for curses.
+            for line in wrapper.fill(parts[0]).split("\n"):
+                lines.append((line, False, False))
+                
+            for part in parts[1:]:
+                if "; " in part:
+                    for sub in part.split("; "):
+                        sub_wrap = textwrap.TextWrapper(width=width - 2, initial_indent=indent + "- ", subsequent_indent=indent + "  ")
+                        for line in sub_wrap.fill(sub).split("\n"):
+                            lines.append((line, False, False))
+                else:
+                    for line in wrapper.fill(part).split("\n"):
+                        lines.append((line, False, False))
+        else:
+            for line in wrapper.fill(description).split("\n"):
+                lines.append((line, False, False))
+            
+        lines.append(("", False, False))
+    return lines, booted_index
+
+def main(stdscr):
+    curses.curs_set(0) # Hide cursor
+    
+    # Fetch deployment data first to get the booted index
+    max_y, max_x = stdscr.getmaxyx()
+    deploy_lines, booted_index = fetch_deployments(max_x)
+    
+    options = [
+        {"title": f"Pin Current Boot (sudo ostree admin pin {booted_index})", "cmd": f"sudo ostree admin pin {booted_index}", "selected": False},
+    ]
+    
+    # Only include the Build option if the user is running this from a project directory containing a build script
+    if os.path.exists("./build.sh"):
+        options.append({"title": "Build OS (./build.sh)", "cmd": "./build.sh", "selected": True})
+        
+    options.extend([
+        {"title": "Apply Upgrade (sudo bootc upgrade)", "cmd": "sudo bootc upgrade", "selected": True},
+        {"title": "Reboot System (systemctl reboot)", "cmd": "systemctl reboot", "selected": False},
+    ])
+    
+    current_row = 0
+    scroll_offset = 0
+    
+    # Setup colors
+    curses.start_color()
+    curses.use_default_colors()
+    curses.init_pair(1, curses.COLOR_CYAN, -1)
+    curses.init_pair(2, curses.COLOR_GREEN, -1)
+    curses.init_pair(3, curses.COLOR_YELLOW, -1)
+    
+    while True:
+        stdscr.clear()
+        max_y, max_x = stdscr.getmaxyx()
+        
+        # Draw header
+        stdscr.addstr(1, 2, "🚀 OSTREE DEPLOYMENT WIZARD", curses.color_pair(1) | curses.A_BOLD)
+        if len(deploy_lines) > max_y - 8:
+            stdscr.addstr(1, 32, "(Use W/S or PgUp/PgDn to scroll deployments)", curses.color_pair(3))
+        
+        # Draw Deployments
+        y = 3
+        visible_lines = max_y - 8 - y
+        
+        for idx, (text, is_header, is_booted) in enumerate(deploy_lines):
+            if idx < scroll_offset:
+                continue
+                
+            if y >= max_y - 8: # Leave room for menu
+                if scroll_offset < len(deploy_lines) - visible_lines:
+                    stdscr.addstr(y, 2, "... (More deployments below) ...", curses.color_pair(3))
+                break
+            try:
+                if is_header:
+                    color = curses.color_pair(2) | curses.A_BOLD if is_booted else curses.A_BOLD
+                    stdscr.addstr(y, 2, text[:max_x-4], color)
+                else:
+                    stdscr.addstr(y, 2, text[:max_x-4])
+            except curses.error:
+                pass # Ignore out of bounds errors safely
+            y += 1
+            
+        # Draw Menu separator
+        y += 1
+        stdscr.addstr(y, 2, "--- Pipeline Actions ---", curses.color_pair(1))
+        y += 1
+        
+        # Draw menu
+        for idx, option in enumerate(options):
+            x = 4
+            opt_y = y + idx
+            
+            if opt_y >= max_y:
+                break
+                
+            # Selection indicator
+            if idx == current_row:
+                stdscr.addstr(opt_y, 2, ">", curses.color_pair(1) | curses.A_BOLD)
+            else:
+                stdscr.addstr(opt_y, 2, " ")
+                
+            # Checkbox
+            checkbox = "[x]" if option["selected"] else "[ ]"
+            color = curses.color_pair(2) if option["selected"] else curses.color_pair(0)
+            
+            stdscr.addstr(opt_y, x, f"{checkbox} {option['title']}", color | (curses.A_BOLD if idx == current_row else 0))
+            
+        opt_y += 2
+        if opt_y < max_y:
+            stdscr.addstr(opt_y, 2, "Use UP/DOWN to navigate, SPACE to toggle, ENTER to execute, Q to quit.")
+            
+        stdscr.refresh()
+        
+        key = stdscr.getch()
+        
+        if key == curses.KEY_UP and current_row > 0:
+            current_row -= 1
+        elif key == curses.KEY_DOWN and current_row < len(options) - 1:
+            current_row += 1
+        elif key in [curses.KEY_PPAGE, ord('w'), ord('W')]: # Scroll deployments up
+            if scroll_offset > 0:
+                scroll_offset -= 1
+        elif key in [curses.KEY_NPAGE, ord('s'), ord('S')]: # Scroll deployments down
+            if scroll_offset < max(0, len(deploy_lines) - (max_y - 8 - 3)):
+                scroll_offset += 1
+        elif key == ord(' '):
+            options[current_row]["selected"] = not options[current_row]["selected"]
+        elif key == ord('\n'):
+            break
+        elif key in [ord('q'), ord('Q')]:
+            sys.exit(0)
+            
+    return [opt["cmd"] for opt in options if opt["selected"]]
+
+# Run UI
+try:
+    selected_commands = curses.wrapper(main)
+except Exception as e:
+    print(f"UI Error: {e}")
+    sys.exit(1)
+
+# Execute selected commands outside of curses context
+if not selected_commands:
+    print("\nNo actions selected. Exiting.")
+    sys.exit(0)
+
+print("\n🚀 Executing Deployment Pipeline...\n")
+
+for cmd in selected_commands:
+    print(f"\033[1;36m==> Running: {cmd}\033[0m")
+    if cmd.split()[:2] == ["sudo", "bootc"] and "upgrade" in cmd:
+        if not preflight_upgrade():
+            sys.exit(1)
+    result = subprocess.run(cmd, shell=True)
+    if result.returncode != 0:
+        print(f"\n\033[1;31m❌ Command failed with exit code {result.returncode}: {cmd}\033[0m")
+        print("Aborting remaining pipeline.")
+        sys.exit(result.returncode)
+    print("\n")
+
+print("\033[1;32m✅ Pipeline completed successfully!\033[0m\n")

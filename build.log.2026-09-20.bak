@@ -1,0 +1,246 @@
+INFO  => Recipe ./recipe.yml is valid
+INFO  => Templating for recipe at ./recipe.yml
+INFO  => Retrieving OS version from ghcr.io/blue-build/base-images/fedora-cosmic:44
+INFO  => Retrieving OS version from ghcr.io/blue-build/base-images/fedora-cosmic:44
+INFO  => Building image localhost/my-custom-os:latest_linux_amd64
+INFO  => Pulling image ghcr.io/blue-build/base-images/fedora-cosmic@sha256:b026ec40c50a4e7f98391c65839d1ab22890ef782fa9fe3f1cbd40ef2bcc2886...
+INFO  => Successfully pulled image ghcr.io/blue-build/base-images/fedora-cosmic@sha256:b026ec40c50a4e7f98391c65839d1ab22890ef782fa9fe3f1cbd40ef2bcc2886
+l/my-custom-os:latest_linux_amd64 => [1/5] STEP 1/1: FROM ghcr.io/blue-build/base-images/fedora-cosmic@sha256:b026ec40c50a4e7f98391c65839d1ab22890ef782fa9fe3f1cbd40ef2bcc2886 AS my-custom-os
+l/my-custom-os:latest_linux_amd64 => --> 9d1c4ff80b99
+l/my-custom-os:latest_linux_amd64 => [2/5] STEP 1/2: FROM scratch AS stage-files
+l/my-custom-os:latest_linux_amd64 => [2/5] STEP 2/2: COPY ./files /files
+l/my-custom-os:latest_linux_amd64 => --> e5a2379d6ed9
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 1/3: FROM scratch AS stage-bins
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 2/3: COPY --from=ghcr.io/sigstore/cosign/cosign:v3.1.1   /ko-app/cosign /bins/cosign
+l/my-custom-os:latest_linux_amd64 => --> Using cache 85a2811d81dd1a64eaab501490de442130b97242c689f46034517fc7f183da5d
+l/my-custom-os:latest_linux_amd64 => --> 85a2811d81dd
+l/my-custom-os:latest_linux_amd64 => [3/5] STEP 3/3: COPY --from=ghcr.io/blue-build/cli:latest-installer   /out/bluebuild /bins/bluebuild
+l/my-custom-os:latest_linux_amd64 => --> Using cache 276204d8650543eb3e70992bbb4a28a8efcd056b9b4cd6c45dc2b47ad9ad1c36
+l/my-custom-os:latest_linux_amd64 => --> 276204d86505
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 1/32: FROM 9d1c4ff80b9939a9e245090aaa75dec62f9196b37ccbdeff691c7f901f7ceafe
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 2/32: ARG TARGETARCH
+l/my-custom-os:latest_linux_amd64 => --> Using cache 6f96f33f9b8234de3501287bac80caf900d74371dee450ea43bf793ed3bc3599
+l/my-custom-os:latest_linux_amd64 => --> 6f96f33f9b82
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 3/32: ARG RECIPE=./recipe.yml
+l/my-custom-os:latest_linux_amd64 => --> Using cache 2e60a5752152044188e1d67fc8f094a72a62d3e4e316f7a8e0585bb0db086949
+l/my-custom-os:latest_linux_amd64 => --> 2e60a5752152
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 4/32: ARG IMAGE_REGISTRY=localhost
+l/my-custom-os:latest_linux_amd64 => --> Using cache db3c7c263cfaba025ea5c64f340f0a4259c925bffda1e0ec1b7829bc1266a042
+l/my-custom-os:latest_linux_amd64 => --> db3c7c263cfa
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 5/32: ARG BB_BUILD_FEATURES=""
+l/my-custom-os:latest_linux_amd64 => --> Using cache a3bd7ceabd725188f891d1191cb801a10977b2c901cecfc4e8fcb7d9931a000a
+l/my-custom-os:latest_linux_amd64 => --> a3bd7ceabd72
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 6/32: ARG CONFIG_DIRECTORY="/tmp/files"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 93b5dc329faabaeda90401cc1b40e5b855f4b263f97fbdf5fb60b1c11650006c
+l/my-custom-os:latest_linux_amd64 => --> 93b5dc329faa
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 7/32: ARG MODULE_DIRECTORY="/tmp/modules"
+l/my-custom-os:latest_linux_amd64 => --> Using cache a790d9ef78628ac81f2a2e1f24b0b296a89b93d426afea4e0e432e1ab8242879
+l/my-custom-os:latest_linux_amd64 => --> a790d9ef7862
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 8/32: ARG IMAGE_NAME="my-custom-os"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 14888f354fa7d11c20604b7ee1d7aad34f74fc0cf2b609ad8d273e1a8b9ccf54
+l/my-custom-os:latest_linux_amd64 => --> 14888f354fa7
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 9/32: ARG BASE_IMAGE="ghcr.io/blue-build/base-images/fedora-cosmic"
+l/my-custom-os:latest_linux_amd64 => --> Using cache 338ab62f5e777ac3262041bd78bd8c6d0e708f66f6776669b1d2c08ae5e5e3a9
+l/my-custom-os:latest_linux_amd64 => --> 338ab62f5e77
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 10/32: RUN --mount=type=bind,from=stage-bins,src=/bins,dst=/tmp/bins   mkdir -p /usr/bin/   && cp /tmp/bins/* /usr/bin/
+l/my-custom-os:latest_linux_amd64 => --> Using cache 68c8b7a8a53f8c99f967987378371dd971219ee6df4120c4cdafd9215b37efad
+l/my-custom-os:latest_linux_amd64 => --> 68c8b7a8a53f
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 11/32: RUN --mount=type=bind,from=ghcr.io/blue-build/nushell-image:default,src=/nu,dst=/tmp/nu   mkdir -p /usr/libexec/bluebuild/nu   && cp -r /tmp/nu/* /usr/libexec/bluebuild/nu/
+l/my-custom-os:latest_linux_amd64 => --> Using cache e7707cd0852f38cba0cf0d13cfdfc2fcc74cea770fcec012bfaf7158ec9e6b17
+l/my-custom-os:latest_linux_amd64 => --> e7707cd0852f
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 12/32: RUN --mount=type=bind,src=.bluebuild-scripts_,dst=/scripts/,Z   /scripts/pre_build.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache fb4513654a09b9f3a5c9ff27605ca1d2b48d23785ec36f00a9033268908f6e43
+l/my-custom-os:latest_linux_amd64 => --> fb4513654a09
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 13/32: COPY scripts/build-custom-battery-applet.sh /tmp/
+l/my-custom-os:latest_linux_amd64 => --> Using cache e1a301de8aa674b16c6513e6d6c473c82da92541c00dc2e5fcf47a232f4d1f04
+l/my-custom-os:latest_linux_amd64 => --> e1a301de8aa6
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 14/32: RUN chmod +x /tmp/build-custom-battery-applet.sh && /tmp/build-custom-battery-applet.sh && rm /tmp/build-custom-battery-applet.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache 5420b142ed362d416f81b85d8e2dfa1418101a0b6534c7816b67faaa8d9efeb3
+l/my-custom-os:latest_linux_amd64 => --> 5420b142ed36
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 15/32: COPY scripts/install-nvpn.sh /tmp/
+l/my-custom-os:latest_linux_amd64 => --> Using cache 8f6cca8b27126f2bc5b1a398b88897ce721eddadf86b24233eed79c4b958d8d0
+l/my-custom-os:latest_linux_amd64 => --> 8f6cca8b2712
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 16/32: RUN chmod +x /tmp/install-nvpn.sh && /tmp/install-nvpn.sh && rm /tmp/install-nvpn.sh
+l/my-custom-os:latest_linux_amd64 => --> Using cache 8758939d893e21b6c64ac6268e0267048013fec5a9db8c29169632b9721c6c55
+l/my-custom-os:latest_linux_amd64 => --> 8758939d893e
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 17/32: RUN dnf copr enable -y atim/nushell
+l/my-custom-os:latest_linux_amd64 => --> Using cache 12c159edc2841166aa7a0730468ea18e9507de13c3803b2f977ee4800b767399
+l/my-custom-os:latest_linux_amd64 => --> 12c159edc284
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 18/32: RUN dnf install -y firewalld fish gnome-console tailscale waypipe gcc make curl file nushell hunspell-de ddcutil && dnf clean all
+l/my-custom-os:latest_linux_amd64 => --> Using cache 758ddffbfac494e7f67988bf49f4a48bfbc2f6e20409074e7a9f262a54556890
+l/my-custom-os:latest_linux_amd64 => --> 758ddffbfac4
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 19/32: RUN dnf remove -y gnome-system-monitor && dnf clean all
+l/my-custom-os:latest_linux_amd64 => --> Using cache 94643ab3ac7e39c0f92c715da18220a0049ebeedf29a067cea468b57029b72b8
+l/my-custom-os:latest_linux_amd64 => --> 94643ab3ac7e
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 20/32: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/files:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'files' '{"type":"files","files":[{"usr":"/usr"},{"etc":"/etc"}]}'
+l/my-custom-os:latest_linux_amd64 => Trying to pull ghcr.io/blue-build/modules/files:latest...
+l/my-custom-os:latest_linux_amd64 => Getting image source signatures
+l/my-custom-os:latest_linux_amd64 => Copying blob sha256:df6a8e398eedeeb32b37e29506317e00357e8a81156ce19fdcff08e970cc3b64
+l/my-custom-os:latest_linux_amd64 => Copying config sha256:236303fb2c2cbf66901f3885cd9c76d126e000bca9738089645783163d27a998
+l/my-custom-os:latest_linux_amd64 => Writing manifest to image destination
+l/my-custom-os:latest_linux_amd64 => ============================= Start 'files' Module =============================
+l/my-custom-os:latest_linux_amd64 => Adding files to image
+l/my-custom-os:latest_linux_amd64 => ATTENTION: You are using the legacy module recipe format.
+l/my-custom-os:latest_linux_amd64 =>            It is advised to switch to the new module recipe format,
+l/my-custom-os:latest_linux_amd64 =>            which contains 'source' & 'destination' YAML keys.
+l/my-custom-os:latest_linux_amd64 =>            For more details, please visit 'files' module documentation:
+l/my-custom-os:latest_linux_amd64 =>            https://blue-build.org/reference/modules/files/
+l/my-custom-os:latest_linux_amd64 => Copying /tmp/files/usr/* to /usr
+l/my-custom-os:latest_linux_amd64 => ATTENTION: You are using the legacy module recipe format.
+l/my-custom-os:latest_linux_amd64 =>            It is advised to switch to the new module recipe format,
+l/my-custom-os:latest_linux_amd64 =>            which contains 'source' & 'destination' YAML keys.
+l/my-custom-os:latest_linux_amd64 =>            For more details, please visit 'files' module documentation:
+l/my-custom-os:latest_linux_amd64 =>            https://blue-build.org/reference/modules/files/
+l/my-custom-os:latest_linux_amd64 => Copying /tmp/files/etc/* to /etc
+l/my-custom-os:latest_linux_amd64 => ============================== End 'files' Module ==============================
+l/my-custom-os:latest_linux_amd64 => --> 640c2fa7486b
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 21/32: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/systemd:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'systemd' '{"type":"systemd","system":{"masked":["NetworkManager-wait-online.service","fedora-atomic-desktop-appstream-cache-refresh.service"],"enabled":["bootc-fetch-apply-updates.timer","nvpn.service","firewalld.service","tailscaled.service"]},"user":{"enabled":["taildrop.service"]}}'
+l/my-custom-os:latest_linux_amd64 => Trying to pull ghcr.io/blue-build/modules/systemd:latest...
+l/my-custom-os:latest_linux_amd64 => Getting image source signatures
+l/my-custom-os:latest_linux_amd64 => Copying blob sha256:357a0dd8dcc8192c9328c943152574efaf4d0ecb97f9df8cb951caa62ba91793
+l/my-custom-os:latest_linux_amd64 => Copying config sha256:9df61fdf9443af3dae3c5aa5922ff0f6bad874a2c600c769d3c50134f0926995
+l/my-custom-os:latest_linux_amd64 => Writing manifest to image destination
+l/my-custom-os:latest_linux_amd64 => ============================ Start 'systemd' Module ============================
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/multi-user.target.wants/nvpn.service' → '/etc/systemd/system/nvpn.service'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/multi-user.target.wants/tailscaled.service' → '/usr/lib/systemd/system/tailscaled.service'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/NetworkManager-wait-online.service' → '/dev/null'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/system/fedora-atomic-desktop-appstream-cache-refresh.service' → '/dev/null'.
+l/my-custom-os:latest_linux_amd64 => Created symlink '/etc/systemd/user/default.target.wants/taildrop.service' → '/usr/lib/systemd/user/taildrop.service'.
+l/my-custom-os:latest_linux_amd64 => ============================= End 'systemd' Module =============================
+l/my-custom-os:latest_linux_amd64 => --> b99904176713
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 22/32: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/kargs:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'kargs' '{"type":"kargs","kargs":["rd.driver.pre=amdgpu"]}'
+l/my-custom-os:latest_linux_amd64 => Trying to pull ghcr.io/blue-build/modules/kargs:latest...
+l/my-custom-os:latest_linux_amd64 => Getting image source signatures
+l/my-custom-os:latest_linux_amd64 => Copying blob sha256:f6e0704aa5c76e4609b5b85ee5e0bfb30b8ee1c498714462b29d8e82a00eaaef
+l/my-custom-os:latest_linux_amd64 => Copying config sha256:300b31f6892b559bd2ef673f6218c098d52b93f02e6eb1a0c02b5271c2f64b87
+l/my-custom-os:latest_linux_amd64 => Writing manifest to image destination
+l/my-custom-os:latest_linux_amd64 => ============================= Start 'kargs' Module =============================
+l/my-custom-os:latest_linux_amd64 => Writing following kernel arguments to kargs.d TOML file: "rd.driver.pre=amdgpu"
+l/my-custom-os:latest_linux_amd64 => ============================== End 'kargs' Module ==============================
+l/my-custom-os:latest_linux_amd64 => --> 3458e59d257b
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 23/32: RUN --mount=type=bind,from=stage-files,src=/files,dst=/tmp/files,rw --mount=type=bind,from=ghcr.io/blue-build/modules/script:latest,src=/modules,dst=/tmp/modules,rw --mount=type=bind,src=.bluebuild-scripts_,dst=/tmp/scripts/,Z --mount=type=cache,sharing=locked,dst=/var/cache/rpm-ostree,id=rpm-ostree-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/libdnf5,id=dnf-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/zypp,id=zypper-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apk,id=apk-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/apt,id=apt-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/var/cache/pacman,id=pacman-cache-my-custom-os-44-stage-my-custom-os --mount=type=cache,sharing=locked,dst=/usr/lib/sysimage/cache/pacman,id=pacman-sysimage-cache-my-custom-os-44-stage-my-custom-os /tmp/scripts/run_module.sh 'script' '{"type":"script","snippets":["rm -f /etc/greenboot/check/required.d/01-cosmic-health.sh","chmod +x /usr/libexec/ideapad-battery-helper","chmod 0440 /etc/sudoers.d/ideapad-battery","chmod 0440 /etc/sudoers.d/bootc-nopasswd","echo \u0027/usr/bin/nu\u0027 \u003e\u003e /etc/shells","firewall-offline-cmd --add-port=53317/tcp","firewall-offline-cmd --add-port=53317/udp","firewall-offline-cmd --zone=trusted --add-interface=tailscale0","echo \u0027ControllerMode = bredr\u0027 \u003e\u003e /etc/bluetooth/main.conf","glib-compile-schemas /usr/share/glib-2.0/schemas/","mkdir -p /etc/containers/registries.conf.d/\ncat \u003c\u003cEOF \u003e /etc/containers/registries.conf.d/99-tailscale.conf\n[[registry]]\nlocation = \"tomahawk-fedora.taila950fb.ts.net:5000\"\ninsecure = true\n\n[[registry]]\nlocation = \"localhost:5000\"\ninsecure = true\nEOF\n","mkdir -p /etc/udev/rules.d\necho \u0027SUBSYSTEM==\"i2c-dev\", KERNEL==\"i2c-[0-9]*\", TAG+=\"uaccess\"\u0027 \u003e /etc/udev/rules.d/99-ddcutil-uaccess.rules\n"]}'
+l/my-custom-os:latest_linux_amd64 => Trying to pull ghcr.io/blue-build/modules/script:latest...
+l/my-custom-os:latest_linux_amd64 => Getting image source signatures
+l/my-custom-os:latest_linux_amd64 => Copying blob sha256:bd437a4fc1dfa0a73de302e2190c86378b1687c1903c2ab4fba7822e60563cec
+l/my-custom-os:latest_linux_amd64 => Copying config sha256:1f778d9d4cfba9fb90eb355a8babb6d9e852eb860a618798a812b96002de179f
+l/my-custom-os:latest_linux_amd64 => Writing manifest to image destination
+l/my-custom-os:latest_linux_amd64 => ============================ Start 'script' Module ============================
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mrm -f /etc/greenboot/check/required.d/01-cosmic-health.sh[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mrm -f /etc/greenboot/check/required.d/01-cosmic-health.sh[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod +x /usr/libexec/ideapad-battery-helper[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod +x /usr/libexec/ideapad-battery-helper[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/ideapad-battery[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/ideapad-battery[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/bootc-nopasswd[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mchmod 0440 /etc/sudoers.d/bootc-nopasswd[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho '/usr/bin/nu' >> /etc/shells[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho '/usr/bin/nu' >> /etc/shells[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/tcp[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/tcp[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/udp[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --add-port=53317/udp[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --zone=trusted --add-interface=tailscale0[0m
+l/my-custom-os:latest_linux_amd64 => success
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mfirewall-offline-cmd --zone=trusted --add-interface=tailscale0[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho 'ControllerMode = bredr' >> /etc/bluetooth/main.conf[0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mecho 'ControllerMode = bredr' >> /etc/bluetooth/main.conf[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mglib-compile-schemas /usr/share/glib-2.0/schemas/[0m
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.IBus.Chewing” has path “/desktop/ibus/engine/chewing/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus” has path “/desktop/ibus/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.general” has path “/desktop/ibus/general/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.general.hotkey” has path “/desktop/ibus/general/hotkey/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.panel” has path “/desktop/ibus/panel/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.freedesktop.ibus.panel.emoji” has path “/desktop/ibus/panel/emoji/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.crypto.cache” has path “/desktop/gnome/crypto/cache/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.crypto.pgp” has path “/desktop/gnome/crypto/pgp/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.locale” has path “/system/locale/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy” has path “/system/proxy/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.http” has path “/system/proxy/http/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.https” has path “/system/proxy/https/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.ftp” has path “/system/proxy/ftp/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => Warning: Schema “org.gnome.system.proxy.socks” has path “/system/proxy/socks/”.  Paths starting with “/apps/”, “/desktop/” or “/system/” are deprecated.
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mglib-compile-schemas /usr/share/glib-2.0/schemas/[0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/containers/registries.conf.d/
+l/my-custom-os:latest_linux_amd64 => cat <<EOF > /etc/containers/registries.conf.d/99-tailscale.conf
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "tomahawk-fedora.taila950fb.ts.net:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "localhost:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => EOF
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/containers/registries.conf.d/
+l/my-custom-os:latest_linux_amd64 => cat <<EOF > /etc/containers/registries.conf.d/99-tailscale.conf
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "tomahawk-fedora.taila950fb.ts.net:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => 
+l/my-custom-os:latest_linux_amd64 => [[registry]]
+l/my-custom-os:latest_linux_amd64 => location = "localhost:5000"
+l/my-custom-os:latest_linux_amd64 => insecure = true
+l/my-custom-os:latest_linux_amd64 => EOF
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mRunning snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/udev/rules.d
+l/my-custom-os:latest_linux_amd64 => echo 'SUBSYSTEM=="i2c-dev", KERNEL=="i2c-[0-9]*", TAG+="uaccess"' > /etc/udev/rules.d/99-ddcutil-uaccess.rules
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mFinished running snippet:
+l/my-custom-os:latest_linux_amd64 => [36mmkdir -p /etc/udev/rules.d
+l/my-custom-os:latest_linux_amd64 => echo 'SUBSYSTEM=="i2c-dev", KERNEL=="i2c-[0-9]*", TAG+="uaccess"' > /etc/udev/rules.d/99-ddcutil-uaccess.rules
+l/my-custom-os:latest_linux_amd64 => [0m
+l/my-custom-os:latest_linux_amd64 => [32mDone[0m
+l/my-custom-os:latest_linux_amd64 => ============================= End 'script' Module =============================
+l/my-custom-os:latest_linux_amd64 => --> 9ac7bc8bdf36
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 24/32: RUN --mount=type=bind,src=.bluebuild-scripts_,dst=/scripts/,Z   /scripts/post_build.sh
+l/my-custom-os:latest_linux_amd64 => --> c1a8f9d91ff8
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 25/32: LABEL io.artifacthub.package.readme-url="https://raw.githubusercontent.com/blue-build/cli/main/README.md"
+l/my-custom-os:latest_linux_amd64 => --> a0e713124caa
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 26/32: LABEL org.blue-build.build-id="495b0a4b-f8f4-47fe-b5b6-af2e1b95552c"
+l/my-custom-os:latest_linux_amd64 => --> 297b7f45e6a5
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 27/32: LABEL org.opencontainers.image.base.digest="sha256:b026ec40c50a4e7f98391c65839d1ab22890ef782fa9fe3f1cbd40ef2bcc2886"
+l/my-custom-os:latest_linux_amd64 => --> cd356338db9d
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 28/32: LABEL org.opencontainers.image.base.name="ghcr.io/blue-build/base-images/fedora-cosmic:44"
+l/my-custom-os:latest_linux_amd64 => --> 736c7a0eec06
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 29/32: LABEL org.opencontainers.image.created="2026-09-20T07:01:30.611947901+00:00"
+l/my-custom-os:latest_linux_amd64 => --> 7848e7aa3fc8
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 30/32: LABEL org.opencontainers.image.description="Custom Fedora COSMIC Atomic with BlueBuild"
+l/my-custom-os:latest_linux_amd64 => --> 81189a62e5d7
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 31/32: LABEL org.opencontainers.image.source=""
+l/my-custom-os:latest_linux_amd64 => --> 86ea53912e29
+l/my-custom-os:latest_linux_amd64 => [5/5] STEP 32/32: LABEL org.opencontainers.image.title="my-custom-os"
+l/my-custom-os:latest_linux_amd64 => [5/5] COMMIT localhost/my-custom-os:latest_linux_amd64
+l/my-custom-os:latest_linux_amd64 => --> f7448623d3f9
+l/my-custom-os:latest_linux_amd64 => Successfully tagged localhost/my-custom-os:latest_linux_amd64
+l/my-custom-os:latest_linux_amd64 => f7448623d3f9a892ca70f9628f5d09327f98b4c40cde44ad2dec4d5fd5f91bf2
+INFO  => Successfully built localhost/my-custom-os:latest_linux_amd64
+INFO  => Finished building:
+	- localhost/my-custom-os:latest
+	- localhost/my-custom-os:20260920
+	- localhost/my-custom-os:44
+	- localhost/my-custom-os:20260920-44

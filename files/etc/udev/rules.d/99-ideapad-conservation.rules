@@ -1,0 +1,1 @@
+ACTION=="add|change", SUBSYSTEM=="platform", DRIVER=="ideapad_acpi", TEST=="conservation_mode", RUN+="/usr/bin/chmod a+w /sys$devpath/conservation_mode"
